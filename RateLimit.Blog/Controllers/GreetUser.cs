@@ -18,15 +18,10 @@ namespace RateLimit.Blog.Controllers
         [HttpGet("auth")]
         [EnableRateLimiting("jwt")]
         [Authorize]
-        public async Task<IActionResult> GreetAuthenticatedUser()
+        public IActionResult GreetAuthenticatedUser()
         {
             var userNameClaim = User.FindFirst(ClaimTypes.Name)?.Value;
-
-            Console.WriteLine(User.Identity);
             var greeting = $"Hello, {userNameClaim}!";
-
-            var token = Request.Headers["Authorization"].ToString();
-            var tokenNumber = token.StartsWith("Bearer ") ? token.Substring(7) : token;
 
             var response = new
             {
@@ -40,11 +35,7 @@ namespace RateLimit.Blog.Controllers
         [EnableRateLimiting("jwt")]
         public async Task<IActionResult> GreetUnAuthenticatedUser()
         {
-            Console.WriteLine(User.Identity);
             var greeting = $"Hello, Guest!";
-
-            var token = Request.Headers["Authorization"].ToString();
-            var tokenNumber = token.StartsWith("Bearer ") ? token.Substring(7) : token;
             var response = new
             {
                 Greeting = greeting,
